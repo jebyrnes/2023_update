@@ -363,7 +363,8 @@ smseco$Type <- rownames(smseco)
 levels(factor(smseco$Type))
 
 jpeg("figures/TotalAbundance_Ecoregion.jpg", width=1024, height=768)
-ggplot(smseco, aes(x=estimate, y=Type, xmin=ci.lb, xmax=ci.ub))+geom_errorbarh(aes(xmax = ci.ub, xmin=ci.lb, height=0.2))+
+ggplot(smseco, aes(x=estimate, y=Type, xmin=ci.lb, xmax=ci.ub)) +
+  geom_errorbarh(aes(xmax = ci.ub, xmin=ci.lb, height=0.2)) +
   geom_point(data=smseco, mapping=aes(y=Type, x=estimate), colour='red', size=3) +theme_bw()+ theme_classic()
   
 geom_vline(xintercept=0)+xlim(c(-4,5)) 
