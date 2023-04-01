@@ -1,7 +1,7 @@
 #' =========================
 #' Maps of Data locations
 #' =========================
-#' 
+
 library(dplyr)
 library(meowR)
 library(ggplot2)
