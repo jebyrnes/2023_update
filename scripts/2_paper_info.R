@@ -48,30 +48,6 @@ biomass_papers <-
 #### Figure S1 Electronic Supp
 ##Extra Number of studies / year - Accumulated
 #Publications by year and acumulated curve
-papers_by_year <-
-  masterData %>% select(Authors..Year.) %>% 
-  group_by(Authors..Year.) %>% 
-  summarise(n = length(unique(Authors..Year.)))
-
-papers_by_year <-
-  masterData %>% 
-  select(Authors..Year.) %>% 
-  separate()
-
-##Extra figs...
-#Publications by year and acumulated curve
-papers_by_year <-
-  masterData %>% select(Authors..Year.) %>% group_by(Authors..Year.) %>% summarise(n =
-                                                                                     length(unique(Authors..Year.)))
-papers_by_year$Author <- papers_by_year$Authors..Year.
-papers_by_year <-
-  papers_by_year %>% separate(Author, sep = "[;()]", into = c("Author", "Year"))
-papers_by_year <-
-  papers_by_year %>% mutate(Year = case_when(Author == "O'Connor and Anderson 2010" ~
-                                               "2010", TRUE ~ Year)) %>% group_by(Year) %>% summarise(n = sum(n))
-papers_by_year<-papers_by_year 
-%>% select(Year, n) %>% 
-  arrange(Year) %>% mutate(Acumulated=cumsum(n))
 
 papers_by_year <- masterData |>
   select(Authors..Year.) |>
@@ -84,7 +60,7 @@ papers_by_year <- masterData |>
   mutate(Accumulated = cumsum(n)) 
 
 
-# Supp fig 1 - paper accumulation over time
+# save out
 jpeg("figures/Sup_1_paper_accumulation.jpg", width=1024, height=768)
 
 ggplot(data = papers_by_year,
