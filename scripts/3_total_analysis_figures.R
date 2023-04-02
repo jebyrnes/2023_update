@@ -77,7 +77,7 @@ TotalAb <- totalabund %>% group_by(Type.of.Study..Experimental_ObservatioNAl.) %
   dplyr::summarise(n=sum(!is.na(VHedges.G))) %>%
   dplyr::rename(Type = Type.of.Study..Experimental_ObservatioNAl.)
 
-sms2 <- left_join(sms2, TotalAb)|>
+sms2 <- left_join(sms2, TotalAb) |>
   mutate(exp_obs_with_samplesize = glue("{`Type`}\n({n})"))
 
 
