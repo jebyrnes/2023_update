@@ -31,7 +31,7 @@ broom.mixed::tidy(totalHedgesEco) |>
   mutate(term = gsub("ECOREGION", "", term))
 
 
-###Figure 2, effect size by ecoregion 
+### Figure 2, effect size by ecoregion 
 smseco <- coef(summary(totalHedgesEco)) |>
   rownames_to_column(var = "Type") |>
   mutate(Type = gsub("ECOREGION", "", Type)) |>
@@ -56,15 +56,102 @@ ggplot(smseco, aes(x = estimate, y=Type)) +
   # geom_point(data = totalabund,
   #            aes(x = Hedges.G, y = ECOREGION),
   #            color = "lightgrey", alpha = 1)
-ggsave(file = "figures/TotalAbundance_Ecoregion.jpg",
+ggsave(file = "figures/Figure_2_TotalAbundance_Ecoregion.jpg",
        dpi=300)
 
 
 
-#####
-totalObsResponse <- totalabund %>%  
-  group_by(Type.of.Study..Experimental_ObservatioNAl.,
-           Clearing.Response..algae_barren_kelp.) %>%
+##### Figure 3a, Observational v. Experimental effects on total abundance
+totalHedges <-  rma.mv(Hedges.G~ 0 + 
+                         Type.of.Study..Experimental_ObservatioNAl., intercept=TRUE,
+                       VHedges.G,struct="CS", verbose = TRUE,
+                       random=list(~1|Authors..Year., ~Authors..Year.|Site),
+                       data=totalabund, control=list(rel.tol=1e-8))
+
+summary(totalHedges)
+sms2 <- coef(summary(totalHedges))
+sms2$Type <- rownames(sms2)
+levels(factor(sms2$Type))
+sms2$Type <- gsub("Type.of.Study..Experimental_ObservatioNAl.", "", sms2$Type)
+
+TotalAb <- totalabund %>% group_by(Type.of.Study..Experimental_ObservatioNAl.) %>%
   dplyr::summarise(n=sum(!is.na(VHedges.G))) %>%
-  dplyr::rename(Type=Type.of.Study..Experimental_ObservatioNAl.) |>
-  ungroup()
+  dplyr::rename(Type = Type.of.Study..Experimental_ObservatioNAl.)
+
+sms2 <- left_join(sms2, TotalAb)|>
+  mutate(exp_obs_with_samplesize = glue("{`Type`}\n({n})"))
+
+
+#Fig 3a new 
+fig_3a <- ggplot(sms2, aes(x=Type, y=estimate)) +
+  geom_jitter(data=totalabund, mapping=aes(x=Type.of.Study..Experimental_ObservatioNAl., 
+                                           y=Hedges.G), 
+              alpha=0.7,
+              color = "grey",
+              position=position_jitter(width = .1), 
+              size=3) +
+  
+   geom_point(size=7, color="red", position=position_dodge(width=0.5)) +
+  geom_linerange(mapping = aes(ymin=ci.lb, ymax=ci.ub),
+                 position=position_dodge(width=0.5),
+                 linewidth = 1) +
+   geom_hline(yintercept=0, lwd=1.4, lty=2) +
+  ylim(c(-3, 3)) +
+  ylab("Hedge's G") + xlab("Study Type") +
+  scale_x_discrete(labels = sms2$exp_obs_with_samplesize)
+
+fig_3a
+
+##### Figure 3b Single Stipe v. Multi-stipe effects on total abundance
+##### using only observational data
+singleMultiTotal <- rma.mv(Hedges.G~ 0 + Single.or.Multi.Stipe, 
+                           VHedges.G, 
+                           random=list(~1|Authors..Year.),
+                           data=totalabund %>% 
+                             filter(Type.of.Study..Experimental_ObservatioNAl.=="Observational"),
+                           control=list(optimizer="nlminb"))
+summary(singleMultiTotal)
+
+ctabSM <- coef(summary(singleMultiTotal))
+ctabSM[["Kelp Morphology"]] <- c("Multi", "Single")
+
+totalMorphSummary <- totalabund %>% 
+  filter(Type.of.Study..Experimental_ObservatioNAl.=="Observational") %>%
+  group_by(Single.or.Multi.Stipe) %>%
+  dplyr::summarise(n=sum(!is.na(VHedges.G))) %>%
+  dplyr::rename(`Kelp Morphology` = Single.or.Multi.Stipe)
+
+ctabSM <- left_join(ctabSM, totalMorphSummary) |>
+  mutate(morph_with_samplesize = glue("{`Kelp Morphology`}\n({n})"))
+
+# Fig 3.b plot
+fig_3b <- ggplot(data = ctabSM, 
+       aes(x=`Kelp Morphology`, y=estimate)) +
+  geom_jitter(data = totalabund |> 
+                filter(Type.of.Study..Experimental_ObservatioNAl.=="Observational"), 
+              mapping=aes(x=Single.or.Multi.Stipe, 
+                          y=Hedges.G), 
+              alpha=0.7, 
+              color = "grey",
+              position=position_jitter(width = .1), 
+              size = 3)+
+  geom_point(size = 7, 
+             color = "red", 
+             position = position_dodge(width=0.5)) +
+  geom_linerange(mapping = aes(ymin=ci.lb, ymax=ci.ub),
+    position = position_dodge(width=0.5),
+    linewidth = 1) +
+  geom_hline(yintercept=0, lwd=1.4, lty=2)+
+  ylim(c(-3, 3)) +
+  ylab("Hedge's G") +
+  scale_x_discrete(labels = ctabSM$morph_with_samplesize)
+
+fig_3b
+
+
+### Combine fig 3a and 3b
+library(patchwork)
+fig_3a + (fig_3b + labs(y = NULL))
+ggsave(file = "figures/Figure_3_TotalAbundance_type_morphology.jpg",
+       dpi=300,
+       width = 10)
