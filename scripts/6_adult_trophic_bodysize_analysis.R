@@ -115,5 +115,5 @@ ggplot(singleSpAbund %>%
 
 ggsave("figures/Figure_5_fish_trophic_size_model.jpg",
        dpi = 300,
-       width = 12)
+       width = 10)
 
