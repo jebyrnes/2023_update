@@ -43,29 +43,28 @@ make_data_map <- function(dat){
 }
 
 ##Fig 1. Total Map using data points by ecoregion
-jpeg("figures/Figure1_all_data_points.jpg", width=1024, height=768)
 make_data_map(masterData)
-dev.off()
+ggsave(file = "figures/Figure1_all_data_points.jpg",
+       dpi=300)
 
 ##Sup Fig 2. Abund map using data points by ecoregion
-jpeg("figures/Sup_2_abund_data_points.jpg", width=1024, height=768)
 make_data_map(totalabund)
-dev.off()
+ggsave(file = "figures/Sup_2_abund_data_points.jpg",
+       dpi=300)
 
 
 ##Sup Fig 3. Richness map using data points by ecoregion
-jpeg("figures/Sup_3_rich_data_points.jpg", width=1024, height=768)
 make_data_map(richness)
-dev.off()
+ggsave(file = "figures/Sup_3_rich_data_points.jpg",
+       dpi=300)
 
 
 ##Sup Fig 4. Single sp abundance map using data points by ecoregion
-jpeg("figures/Sup_4_single_sp_abund_data_points.jpg", width=1024, height=768)
 make_data_map(singleSpAbund)
-dev.off()
-
+ggsave(file = "figures/Sup_4_single_sp_abund_data_points.jpg",
+       dpi=300)
 
 ##Sup Fig 5. Updated Map using data points by ecoregion
-jpeg("figures/Sup_5_biomass_data_points.jpg", width=1024, height=768)
 make_data_map(biomass)
-dev.off()
+ggsave(file = "figures/Sup_5_biomass_data_points.jpg",
+       dpi=300)
