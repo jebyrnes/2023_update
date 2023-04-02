@@ -44,7 +44,7 @@ make_data_map <- function(dat){
 
 ##Fig 1. Total Map using data points by ecoregion
 make_data_map(masterData)
-ggsave(file = "figures/Figure1_all_data_points.jpg",
+ggsave(file = "figures/Figure_1_all_data_points.jpg",
        dpi=300)
 
 ##Sup Fig 2. Abund map using data points by ecoregion
