@@ -1,6 +1,6 @@
 ############
 # Analyses and Figures of Effects of Trophic Level and 
-# Body Size on Individual Species from Experiments
+# Body Size on Individual Adult Species from Experiments
 ############
 
 #Load libraries and Data
