@@ -35,7 +35,7 @@ make_data_map <- function(dat){
     ggplot() +
     geom_sf(data = countries, color = NA) +
     geom_sf(data = coast, linewidth = 0.1) +
-    geom_sf(aes(fill = `Data Points`)) + 
+    geom_sf(aes(fill = `Data Points`), alpha = 0.5) + 
     scale_fill_distiller(trans = "log10",
                          palette = "Spectral") +
     labs(title = "Data Points by Ecoregion",
