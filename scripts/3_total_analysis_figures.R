@@ -1,4 +1,3 @@
-
 ############
 # Analyses and Figures of Total Abundance Effects
 ############
