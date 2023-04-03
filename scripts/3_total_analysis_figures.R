@@ -61,7 +61,7 @@ ggsave(file = "figures/Supp_6_TotalAbundance_Ecoregion.jpg",
 
 
 
-##### Analysis/Figure 3a, Observational v. Experimental effects on total abundance
+##### Analysis/Figure 2a, Observational v. Experimental effects on total abundance
 totalHedges <-  rma.mv(Hedges.G~ 0 + 
                          Type.of.Study..Experimental_ObservatioNAl., intercept=TRUE,
                        VHedges.G,struct="CS", verbose = TRUE,
@@ -72,7 +72,7 @@ summary(totalHedges)
 tidy(total(Hedges))
 
 
-##### Analysis/Figure 3b Single Stipe v. Multi-stipe effects on total abundance
+##### Analysis/Figure 2b Single Stipe v. Multi-stipe effects on total abundance
 ##### using only observational data
 singleMultiObs <- rma.mv(Hedges.G~ 0 + Single.or.Multi.Stipe, 
                          VHedges.G, 
@@ -85,7 +85,7 @@ tidy(singleMultiObs)
 
 ####
 
-##### Analysis/Figure 3c Single Stipe v. Multi-stipe effects on total abundance
+##### Analysis/Figure 2c Single Stipe v. Multi-stipe effects on total abundance
 ##### using only experimental data
 singleMultiTotalExp <- rma.mv(Hedges.G~ 0 + Single.or.Multi.Stipe, 
                               VHedges.G, 
@@ -98,16 +98,16 @@ tidy(singleMultiTotalExp)
 
 
 ### Make figs from models
-fig_3_panels <- get_model_figs(totalHedges,
+fig_2_panels <- get_model_figs(totalHedges,
                                singleMultiObs,
                                singleMultiTotalExp,
                                totalabund,
                                ylim_vals = c(-5,5))
 
-### Combine fig 3a and 3b
-make_3_panel_fig(fig_3_panels)
+### Combine fig panels
+make_3_panel_fig(fig_2_panels)
 
-ggsave(file = "figures/Figure_3_TotalAbundance_type_morphology.jpg",
+ggsave(file = "figures/Figure_2_TotalAbundance_type_morphology.jpg",
        dpi=300,
        width = 15)
 
