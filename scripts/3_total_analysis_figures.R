@@ -13,6 +13,7 @@ library(ggplot2)
 theme_set(theme_classic(base_size = 24) )
 
 source("scripts/open_all_data_for_analysis.R")
+source("scripts/make_three_panel_plot.R")
 
 # Analysis by ecoregion
 # using -1 so that we have no reference/intercept region
@@ -30,7 +31,7 @@ broom.mixed::tidy(totalHedgesEco) |>
   mutate(term = gsub("ECOREGION", "", term))
 
 
-### Figure 2, effect size by ecoregion 
+### Supp Figure 6, effect size by ecoregion 
 smseco <- coef(summary(totalHedgesEco)) |>
   rownames_to_column(var = "Type") |>
   mutate(Type = gsub("ECOREGION", "", Type)) |>
@@ -52,15 +53,15 @@ ggplot(smseco, aes(x = estimate, y=Type)) +
              colour='red', size=3) +
   labs(y = "", x = "Hedge's G") +
   geom_vline(xintercept=0, lty = 2) #+
-  # geom_point(data = totalabund,
-  #            aes(x = Hedges.G, y = ECOREGION),
-  #            color = "lightgrey", alpha = 1)
-ggsave(file = "figures/Figure_2_TotalAbundance_Ecoregion.jpg",
+# geom_point(data = totalabund,
+#            aes(x = Hedges.G, y = ECOREGION),
+#            color = "lightgrey", alpha = 1)
+ggsave(file = "figures/Supp_6_TotalAbundance_Ecoregion.jpg",
        dpi=300)
 
 
 
-##### Figure 3a, Observational v. Experimental effects on total abundance
+##### Analysis/Figure 3a, Observational v. Experimental effects on total abundance
 totalHedges <-  rma.mv(Hedges.G~ 0 + 
                          Type.of.Study..Experimental_ObservatioNAl., intercept=TRUE,
                        VHedges.G,struct="CS", verbose = TRUE,
@@ -68,89 +69,56 @@ totalHedges <-  rma.mv(Hedges.G~ 0 +
                        data=totalabund, control=list(rel.tol=1e-8))
 
 summary(totalHedges)
-sms2 <- coef(summary(totalHedges))
-sms2$Type <- rownames(sms2)
-levels(factor(sms2$Type))
-sms2$Type <- gsub("Type.of.Study..Experimental_ObservatioNAl.", "", sms2$Type)
-
-TotalAb <- totalabund %>% group_by(Type.of.Study..Experimental_ObservatioNAl.) %>%
-  dplyr::summarise(n=sum(!is.na(VHedges.G))) %>%
-  dplyr::rename(Type = Type.of.Study..Experimental_ObservatioNAl.)
-
-sms2 <- left_join(sms2, TotalAb) |>
-  mutate(exp_obs_with_samplesize = glue("{`Type`}\n({n})"))
+tidy(total(Hedges))
 
 
-#Fig 3a new 
-fig_3a <- ggplot(sms2, aes(x=Type, y=estimate)) +
-  geom_jitter(data=totalabund, mapping=aes(x=Type.of.Study..Experimental_ObservatioNAl., 
-                                           y=Hedges.G), 
-              alpha=0.7,
-              color = "grey",
-              position=position_jitter(width = .1), 
-              size=3) +
-  
-   geom_point(size=7, color="red", position=position_dodge(width=0.5)) +
-  geom_linerange(mapping = aes(ymin=ci.lb, ymax=ci.ub),
-                 position=position_dodge(width=0.5),
-                 linewidth = 1) +
-   geom_hline(yintercept=0, lwd=1.4, lty=2) +
-  ylim(c(-3, 3)) +
-  ylab("Hedge's G") + xlab("Study Type") +
-  scale_x_discrete(labels = sms2$exp_obs_with_samplesize)
-
-fig_3a
-
-##### Figure 3b Single Stipe v. Multi-stipe effects on total abundance
+##### Analysis/Figure 3b Single Stipe v. Multi-stipe effects on total abundance
 ##### using only observational data
-singleMultiTotal <- rma.mv(Hedges.G~ 0 + Single.or.Multi.Stipe, 
-                           VHedges.G, 
-                           random=list(~1|Authors..Year.),
-                           data=totalabund %>% 
-                             filter(Type.of.Study..Experimental_ObservatioNAl.=="Observational"),
-                           control=list(optimizer="nlminb"))
-summary(singleMultiTotal)
+singleMultiObs <- rma.mv(Hedges.G~ 0 + Single.or.Multi.Stipe, 
+                         VHedges.G, 
+                         random=list(~1|Authors..Year.),
+                         data=totalabund %>% 
+                           filter(Type.of.Study..Experimental_ObservatioNAl.=="Observational"),
+                         control=list(optimizer="nlminb"))
+summary(singleMultiObs)
+tidy(singleMultiObs)
 
-ctabSM <- coef(summary(singleMultiTotal))
-ctabSM[["Kelp Morphology"]] <- c("Multi", "Single")
+####
 
-totalMorphSummary <- totalabund %>% 
-  filter(Type.of.Study..Experimental_ObservatioNAl.=="Observational") %>%
-  group_by(Single.or.Multi.Stipe) %>%
-  dplyr::summarise(n=sum(!is.na(VHedges.G))) %>%
-  dplyr::rename(`Kelp Morphology` = Single.or.Multi.Stipe)
+##### Analysis/Figure 3c Single Stipe v. Multi-stipe effects on total abundance
+##### using only experimental data
+singleMultiTotalExp <- rma.mv(Hedges.G~ 0 + Single.or.Multi.Stipe, 
+                              VHedges.G, 
+                              random=list(~1|Authors..Year.),
+                              data=totalabund %>% 
+                                filter(Type.of.Study..Experimental_ObservatioNAl.=="Experimental"),
+                              control=list(optimizer="nlminb"))
+summary(singleMultiTotalExp)
+tidy(singleMultiTotalExp)
 
-ctabSM <- left_join(ctabSM, totalMorphSummary) |>
-  mutate(morph_with_samplesize = glue("{`Kelp Morphology`}\n({n})"))
 
-# Fig 3.b plot
-fig_3b <- ggplot(data = ctabSM, 
-       aes(x=`Kelp Morphology`, y=estimate)) +
-  geom_jitter(data = totalabund |> 
-                filter(Type.of.Study..Experimental_ObservatioNAl.=="Observational"), 
-              mapping=aes(x=Single.or.Multi.Stipe, 
-                          y=Hedges.G), 
-              alpha=0.7, 
-              color = "grey",
-              position=position_jitter(width = .1), 
-              size = 3)+
-  geom_point(size = 7, 
-             color = "red", 
-             position = position_dodge(width=0.5)) +
-  geom_linerange(mapping = aes(ymin=ci.lb, ymax=ci.ub),
-    position = position_dodge(width=0.5),
-    linewidth = 1) +
-  geom_hline(yintercept=0, lwd=1.4, lty=2)+
-  ylim(c(-3, 3)) +
-  ylab("Hedge's G") +
-  scale_x_discrete(labels = ctabSM$morph_with_samplesize)
-
-fig_3b
-
+### Make figs from models
+fig_3_panels <- get_model_figs(totalHedges,
+                               singleMultiObs,
+                               singleMultiTotalExp,
+                               totalabund,
+                               ylim_vals = c(-5,5))
 
 ### Combine fig 3a and 3b
-library(patchwork)
-fig_3a + (fig_3b + labs(y = NULL))
+make_3_panel_fig(fig_3_panels)
+
 ggsave(file = "figures/Figure_3_TotalAbundance_type_morphology.jpg",
        dpi=300,
-       width = 10)
+       width = 15)
+
+
+# check errant values
+totalabund |>
+  filter(Hedges.G > 3) |>
+  select(3:4, Mean.kelp ,
+         Mean.no.Kelp,
+         sd_kelp,
+         sd_nokelp,
+         N..Kelp.,
+         N..no.kelp.,
+         Hedges.G) |> View()
