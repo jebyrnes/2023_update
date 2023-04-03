@@ -87,7 +87,7 @@ singleSpAbund <- singleSpAbund %>%
     )
   ))
 
-# Figure 5
+# Figure 4
 ggplot(singleSpAbund %>% 
          filter(Type.of.Study..Experimental_ObservatioNAl.=="Experimental") %>% 
          filter(Juvenile..Adult..Both =="Adult"),
@@ -113,7 +113,7 @@ ggplot(singleSpAbund %>%
        size = "Precision",
        color = "Trophic Level")
 
-ggsave("figures/Figure_5_fish_trophic_size_model.jpg",
+ggsave("figures/Figure_4_fish_trophic_size_model.jpg",
        dpi = 300,
        width = 10)
 
