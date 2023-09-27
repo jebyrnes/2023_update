@@ -69,7 +69,7 @@ totalHedges <-  rma.mv(Hedges.G~ 0 +
                        data=totalabund, control=list(rel.tol=1e-8))
 
 summary(totalHedges)
-tidy(total(Hedges))
+tidy(totalHedges)
 
 
 ##### Analysis/Figure 2b Single Stipe v. Multi-stipe effects on total abundance
