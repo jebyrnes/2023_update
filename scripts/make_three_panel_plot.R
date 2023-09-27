@@ -76,6 +76,6 @@ make_3_panel_fig <- function(figs){
     (figs[[2]] + labs(y = NULL, 
                               subtitle = "B. Observational Data Only")) + 
     (figs[[3]] + labs(y = NULL,
-                              subtitle = "B. Experimental Data Only"))
+                              subtitle = "C. Experimental Data Only"))
   
 }
