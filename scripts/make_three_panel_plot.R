@@ -64,7 +64,7 @@ make_model_fig <- function(ctab, dat, group_var, ylim_vals = c(-3,3)){
                    linewidth = 1) +
     geom_hline(yintercept=0, lwd=1.4, lty=2) +
     ylim(ylim_vals) +
-    ylab("Hedge's G") + xlab("Study Type") +
+    ylab("Hedge's G")  +
     scale_x_discrete(labels = ctab$type_with_samplesize)
 }
 
@@ -72,10 +72,13 @@ make_model_fig <- function(ctab, dat, group_var, ylim_vals = c(-3,3)){
 
 library(patchwork)
 make_3_panel_fig <- function(figs){
-  (figs[[1]] + labs(subtitle = "A. Pooled Data")) + 
+  (figs[[1]] + labs(subtitle = "A. Pooled Data",
+                    x = "Study Type")) + 
     (figs[[2]] + labs(y = NULL, 
-                              subtitle = "B. Observational Data Only")) + 
+                      x = "Kelp Morphology",
+                      subtitle = "B. Observational Data Only")) + 
     (figs[[3]] + labs(y = NULL,
+                      x = "Kelp Morphology",
                               subtitle = "C. Experimental Data Only"))
   
 }

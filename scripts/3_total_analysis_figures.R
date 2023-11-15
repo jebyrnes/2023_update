@@ -105,11 +105,16 @@ fig_2_panels <- get_model_figs(totalHedges,
                                ylim_vals = c(-5,5))
 
 ### Combine fig panels
-make_3_panel_fig(fig_2_panels)
+make_3_panel_fig((fig_2_panels[[1]] + 
+                    ylab("Effect Size of Kelp on\nTotal Fish Abundance (Hedge's G)")) +
+                   fig_2_panels[[2]] +
+                   fig_2_panels[[3]]) 
+  
 
 ggsave(file = "figures/Figure_2_TotalAbundance_type_morphology.jpg",
        dpi=300,
-       width = 15)
+       width = 17,
+       height = 10)
 
 
 # check errant values
