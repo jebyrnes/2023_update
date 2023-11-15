@@ -13,7 +13,8 @@ library(dplyr)
 library(meowR)
 library(knitr)
 
-singleSpAbund <- read.csv("data/single_sp_abund_clean.csv") %>% 
+singleSpAbund <- read.csv("data/single_s
+                          p_abund_clean.csv") %>% 
   filter(!is.na(VHedges.G )) 
 
 totalabund<-read.csv("data/total_abund_clean.csv") %>% 

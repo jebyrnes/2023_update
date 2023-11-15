@@ -32,7 +32,7 @@ library(RCurl)
 library(rgdal) 
 
 
-masterFish <- read.csv2("data/FishKelpMetanalaysis.csv") %>% filter(Authors..Year.!="Levin and Hay (2002)", Mean.Depth..m. != "intertidal")
+masterFish <- read.csv2("data/FishKelpMetanalaysis.csv") %>% filter(Authors..Year.!="Levin and Hay (2002)", Mean.Depth..m. != "intertidal", )
 
 
 str(masterFish)

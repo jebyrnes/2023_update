@@ -43,22 +43,22 @@ tidy(juvMorphologyHedges)
 
 # Analysis of Study Type and Morphology
 
-juvHedgesObs <- rma.mv(Hedges.G~ 0 + 
-                         Single.or.Multi.Stipe, 
-                       VHedges.G, 
-                       random=list(~1|Authors..Year., ~Authors..Year.|Site), 
-                       struct="HCS",rho=0,
-                       data=juveniles |>
-                         filter(Type.of.Study..Experimental_ObservatioNAl. == "Observational"))
-
-
 juvHedgesExp <- rma.mv(Hedges.G~ 0 + 
                          Single.or.Multi.Stipe, 
                        VHedges.G, 
                        random=list(~1|Authors..Year., ~Authors..Year.|Site), 
                        struct="HCS",rho=0,
                        data=juveniles |>
-                         filter(Type.of.Study..Experimental_ObservatioNAl. != "Observational"))
+                         filter(Type.of.Study..Experimental_ObservatioNAl. == "Experimental"))
+
+
+juvHedgesObs <- rma.mv(Hedges.G~ 0 + 
+                         Single.or.Multi.Stipe, 
+                       VHedges.G, 
+                       random=list(~1|Authors..Year., ~Authors..Year.|Site), 
+                       struct="HCS",rho=0,
+                       data=juveniles |>
+                         filter(Type.of.Study..Experimental_ObservatioNAl. != "ObservatioNAl"))
 # results
 tidy(juvHedgesObs) |>
   mutate(term =  gsub("Single.or.Multi.Stipe", "", term))
