@@ -54,8 +54,13 @@ fig_3_panels <- get_model_figs(richnessHedges,
                                ylim_vals = c(-6,7))
 
 ### Combine fig panels
-make_3_panel_fig(fig_3_panels)
+make_3_panel_fig((fig_3_panels[[1]] + 
+                    ylab("Effect Size of Kelp on\nFish Species Richness (Hedge's G)")) +
+                   fig_3_panels[[2]] +
+                   fig_3_panels[[3]]) 
 
 ggsave(file = "figures/Figure_3_Richness_type_morphology.jpg",
        dpi=300,
-       width = 15)
+       width = 17,
+       height = 10)
+
