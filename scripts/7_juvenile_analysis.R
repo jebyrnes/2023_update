@@ -74,11 +74,15 @@ fig_5_panels <- get_model_figs(juvHedges,
                                ylim_vals = c(-5,5))
 
 ### Combine fig panels
-make_3_panel_fig(fig_5_panels)
+make_3_panel_fig((fig_5_panels[[1]] + 
+                    ylab("Effect Size of Kelp on\nJuvenile Fish Abundance (Hedge's G)")) +
+                   fig_5_panels[[2]] +
+                   fig_5_panels[[3]]) 
 
 ggsave(file = "figures/Figure_5_juveniles_type_morphology.jpg",
        dpi=300,
-       width = 15)
+       width = 17,
+       height = 10)
 
 
 # check errant values
