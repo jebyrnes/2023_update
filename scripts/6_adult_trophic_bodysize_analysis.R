@@ -11,6 +11,7 @@ library(glue)
 library(broom)
 library(broom.mixed)
 library(ggplot2)
+library(emmeans)
 library(wesanderson)
 theme_set(theme_classic(base_size = 20) )
 
@@ -117,3 +118,46 @@ ggsave("figures/Figure_4_fish_trophic_size_model.jpg",
        dpi = 300,
        width = 10)
 
+
+# Trends for different trophic indices
+
+pred_slopes <- expand.grid(Trophic.level = 2:4, 
+                           length = seq(0,1))
+slopes <- sapply(1:nrow(pred_slopes), function(i) {
+  predict(model.trophic.exp, 
+          newmods=cbind(pred_slopes[i,1],
+                        pred_slopes[i,2],
+                        pred_slopes[i,1]*pred_slopes[i,2]),
+          level=95)
+})
+
+slopes <- slopes[1:4,]
+
+pred_slopes$eff <- as.numeric(slopes[1,])
+pred_slopes$ci.lb <- as.numeric(slopes[3,])
+pred_slopes$ci.ub <- as.numeric(slopes[4,])
+
+
+pred_slopes <- pred_slopes %>%
+  mutate (Trophic.group2 =
+            as.factor(
+              case_when(
+                Trophic.level == "2" ~ "Herbivores",
+                Trophic.level == "3" ~ "Mesopredators",
+                Trophic.level == "4"  ~ "Top Predators"
+              )
+            ))
+
+
+# get slope estimate and estimate of the CIs using estimated predictions
+# at 0 and 1
+pred_slopes <- pred_slopes |>
+  tidyr::pivot_wider(names_from = "length",
+                     values_from = c("eff", "ci.lb", "ci.ub")) |>
+  mutate(slope = eff_1 - eff_0,
+         ci.lb = ci.lb_1 - ci.lb_0,
+         ci.ub = ci.ub_1 - ci.ub_0
+  ) |>
+  select(Trophic.group2, slope, ci.lb, ci.ub)
+
+pred_slopes
