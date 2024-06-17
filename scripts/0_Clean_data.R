@@ -31,7 +31,7 @@ library(plyr)
 library(RCurl)
 library(rgdal) 
 
-
+# Remove unused papers due to not matching criteria
 masterFish <- read.csv2("data/FishKelpMetanalaysis.csv") %>% filter(Authors..Year.!="Levin and Hay (2002)", Mean.Depth..m. != "intertidal", )
 
 
