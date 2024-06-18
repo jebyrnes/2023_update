@@ -112,7 +112,7 @@ Data was extracted from papers using [Web Plot Digitizer](https://automeris.io/)
   
 - Date of t0 (dd/mm/yyyy): Date that the removal was started in the format specified.  
 
-- Fish Species - Latin Binomial of fish species name.  
+- Fish Species - Latin Binomial of fish species name if single species.  
   
 - Order - Order of Fish species.  
   
@@ -193,4 +193,6 @@ masterFish_clean.csv is the cleaned modified data file based on the above two ra
 
 - REALM - Realm using Spalding et al.’s 2008 Marine Ecoregions of the World definition.
 
+## References
+Spalding, M. D., H. E. Fox, G. R. Allen, N. Davidson, Z. A. Ferdaña, M. Finlayson, B. S. Halpern, M. A. Jorge, A. L. Lombana, and S. A. Lourie. 2007. Marine ecoregions of the world: a bioregionalization of coastal and shelf areas. Bioscience 57:573–583.
 
