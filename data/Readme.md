@@ -52,7 +52,7 @@ Data was extracted from papers using [Web Plot Digitizer](https://automeris.io/)
 
 - Unit Dimensions: The dimensions of one sample unit.
 
-- Area (m2): The area in square meters of one sample unit. Note, people filled this in in a lot of different ways, so this column should be used to calculate the new sample unit area value.  We’ll be deleting it eventually.
+- Area (m2): The area in square meters of one sample unit. Note, this was filled in imprecisely in several ways. Should not be used for calculations, but can be used for reference.
 
 - Notes on Type of study: Short description of the study.
  
