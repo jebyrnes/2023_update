@@ -66,21 +66,21 @@ Data was extracted from papers using [Web Plot Digitizer](https://automeris.io/)
 
 - Mean Depth (m): Depth where the observation was taken in meters. 
 
-- Inferred Mechanism of Clearing (experiment, storm, heat wave, barren, kelp addition): What mechanism can be inferred for creating a clearing. Use the provided words as your entry.
+- Inferred Mechanism of Clearing (experiment, storm, heat wave, barren, kelp addition): What mechanism can be inferred for creating a clearing. 
 
-- Type of Study (Experimental, Observational): Was the study from an experimental manipulation or an observational study. Use the provided words as your entry.
+- Type of Study (Experimental, Observational): Was the study from an experimental manipulation or an observational study. 
 
-- Observational Study Type (Spatial, Temporal): If this was an observational study, were comparisons of plots made across space or over time? Use the provided words as your entry.
+- Observational Study Type (Spatial, Temporal): If this was an observational study, were comparisons of plots made across space or over time?
 
-- Single Species? (yes/no): Did this data point record information about a single species? yes/no only.
+- Single Species? (yes/no): Did this data point record information about a single species? 
 
-- Total Abundance? (yes/no): Did this data point record information about a total community abundance? yes/no only.
+- Total Abundance? (yes/no): Did this data point record information about a total community abundance? 
 
-- Species Richness? (yes/no): Did this data point record values of species richness? yes/no only.
+- Species Richness? (yes/no): Did this data point record values of species richness? 
 
-- Biomass? (yes/no): Did this data point record information about a biomass? yes/no only.
+- Biomass? (yes/no): Did this data point record information about a biomass? 
 
-- Clearing Response (algae, barren, kelp): How did the kelp removal site respond.  Did it turn back into an algal bed, a barren of some type, or did kelp return. Use the provided words as your entry. Invertebrate barrens are still barrens.
+- Clearing Response (algae, barren, kelp): How did the kelp removal site respond.  Did it turn back into an algal bed, a barren of some type, or did kelp return. Note: invertebrate barrens are still barrens.
 
 - Survey Type (quadrat, transect, video, photo, Net/Trap): What was used for the survey? Use the provided words as your entry.
   
