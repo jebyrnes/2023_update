@@ -54,7 +54,7 @@ tidy(juv_resampling)|> mutate(type = "Juveniles"),
          `Effect of Time` = estimate,
          `Std. Error` = std.error,
          `p` = p.value) |>
-  readr::write_csv("tables/supp_table_1_time_effect.csv")
+  readr::write_csv("tables/supp_table_s4_time_effect.csv")
 
 
 ## 
@@ -101,3 +101,16 @@ ggsave(file = "figures/Supp_8_time_n.jpg",
        dpi=300,
        width =  12,
        height = 5)
+
+## Some info
+#Studies longer than 3 months
+sum(dat_to_plot$Time.Until.Resampling..days.>90)
+
+#N of those studies
+dat_to_plot[dat_to_plot$Time.Until.Resampling..days.>90,] |>
+  pull(N..Kelp.) 
+
+
+dat_to_plot[dat_to_plot$Time.Until.Resampling..days.<90,] |>
+  pull(N..Kelp.) 
+
