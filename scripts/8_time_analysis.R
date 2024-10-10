@@ -12,12 +12,14 @@ library(broom.mixed)
 library(ggplot2)
 theme_set(theme_classic(base_size = 24) )
 
+
+source("scripts/open_all_data_for_analysis.R")
+source("scripts/make_three_panel_plot.R")
+
 # we are going to look at juveniles
 juveniles <- singleSpAbund |>
   filter(Juvenile..Adult..Both == "Juvenile")
 
-source("scripts/open_all_data_for_analysis.R")
-source("scripts/make_three_panel_plot.R")
 
 total_resampling <-  rma.mv(Hedges.G ~ Time.Until.Resampling..days.,
                           VHedges.G, 
@@ -74,7 +76,7 @@ dat_to_plot$N..no.kelp. - dat_to_plot$N..Kelp.
 ggplot(dat_to_plot,
        aes(x = Time.Until.Resampling..days., y = Hedges.G)) +
   geom_point(alpha = 0.5, size = 4) +
-  facet_wrap(~type) 
+  facet_wrap(~type) +
   labs(size = "Sample Size", 
          x = "Time Until Resampling (days)",
          y = "Hedge's G")
