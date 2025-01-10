@@ -57,7 +57,7 @@ ggplot(smseco, aes(x = estimate, y=Type)) +
 #            aes(x = Hedges.G, y = ECOREGION),
 #            color = "lightgrey", alpha = 1)
 ggsave(file = "figures/Supp_6_TotalAbundance_Ecoregion.jpg",
-       dpi=300)
+       dpi=400, width = 8, height = 9)
 
 
 
